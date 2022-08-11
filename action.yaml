@@ -1,5 +1,8 @@
 name: "Build-A-Badge"
 description: "Creates dynamic and customizable README badges using shields.io/endpoint"
+branding:
+  icon: "shield"
+  color: "blue"
 inputs:
   filename:
     description: "The filename to use in the wiki for storing the JSON badge data"
