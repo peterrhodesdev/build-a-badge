@@ -1,0 +1,42 @@
+name: "Build-A-Badge"
+description: "Creates dynamic and customizable README badges using shields.io/endpoint"
+inputs:
+  filename:
+    description: "The filename to use in the wiki for storing the JSON badge data"
+    required: false
+    default: ${{ github.workflow }}
+  label:
+    description: "The left text, or the empty string to omit the left side of the badge"
+    required: true
+  message:
+    description: "The right text"
+    required: true
+  color:
+    description: "The right color"
+    required: false
+    default: lightgrey
+runs:
+  using: "composite"
+  steps:
+    - name: Output user details
+      id: user_details
+      run: |
+        echo "::set-output name=username::$(git log -n 1 --pretty=format:%an)"
+        echo "::set-output name=email::$(git log -n 1 --pretty=format:%ae)"
+      shell: bash
+    - name: Check out wiki
+      uses: actions/checkout@v3
+      with:
+        repository: "${{ github.repository }}.wiki"
+        path: wiki
+    - name: Update wiki
+      run: |
+        cd ./wiki
+        echo '{"schemaVersion":1,"label":"${{ inputs.label }}","message":"${{ inputs.message }}","color":"${{ inputs.color }}"}' > "${{ inputs.filename }}.md"
+        git config user.name ${{ steps.user_details.outputs.username }}
+        git config user.email ${{ steps.user_details.outputs.email }}
+        git add -A
+        git commit -m "update from workflow ${{ github.workflow }}"
+        git push
+        cd ..
+      shell: bash
