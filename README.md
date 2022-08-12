@@ -11,7 +11,7 @@ Add a step to your workflow:
 
 ```yml
 - name: Build-A-Badge
-  uses: peterrhodesdev/build-a-badge@v1.0.1
+  uses: peterrhodesdev/build-a-badge@v1.0.2
   with:
     filename: test-badge
     label: "left text"

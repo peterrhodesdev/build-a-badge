@@ -21,6 +21,8 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Check out repo
+      uses: actions/checkout@v3
     - name: Output user details
       id: user_details
       run: |
