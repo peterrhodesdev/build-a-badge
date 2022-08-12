@@ -17,7 +17,23 @@ inputs:
   color:
     description: "The right color"
     required: false
-    default: lightgrey
+    default: ""
+  labelColor:
+    description: "The left color"
+    required: false
+    default: ""
+  namedLogo:
+    description: "Logo supported by Shields"
+    required: false
+    default: ""
+  logoSvg:
+    description: "An SVG string containing a custom logo"
+    required: false
+    default: ""
+  style:
+    description: "The default template to use"
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -36,8 +52,21 @@ runs:
         path: wiki
     - name: Update wiki
       run: |
+        BADGE_JSON="{\"schemaVersion\":1,\"label\":\"${{ inputs.label }}\",\"message\":\"${{ inputs.message }}\""
+        declare -A OPTIONAL_PARAMETERS_ARRAY
+        OPTIONAL_PARAMETERS_ARRAY["color"]=${{ inputs.color }}
+        OPTIONAL_PARAMETERS_ARRAY["labelColor"]=${{ inputs.labelColor }}
+        OPTIONAL_PARAMETERS_ARRAY["namedLogo"]=${{ inputs.namedLogo }}
+        OPTIONAL_PARAMETERS_ARRAY["logoSvg"]=${{ inputs.logoSvg }}
+        OPTIONAL_PARAMETERS_ARRAY["style"]=${{ inputs.style }}
+        for key in ${!OPTIONAL_PARAMETERS_ARRAY[@]}; do
+          if [[ -n "${OPTIONAL_PARAMETERS_ARRAY[${key}]}" ]]; then
+            BADGE_JSON="$BADGE_JSON,\"$key\":\"${OPTIONAL_PARAMETERS_ARRAY[${key}]}\""
+          fi
+        done
+        BADGE_JSON="$BADGE_JSON}"
         cd ./wiki
-        echo '{"schemaVersion":1,"label":"${{ inputs.label }}","message":"${{ inputs.message }}","color":"${{ inputs.color }}"}' > "${{ inputs.filename }}.md"
+        echo $BADGE_JSON > "${{ inputs.filename }}.md"
         if [[ -n $(git status --porcelain) ]]; then
           git config user.name ${{ steps.user_details.outputs.username }}
           git config user.email ${{ steps.user_details.outputs.email }}

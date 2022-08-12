@@ -11,28 +11,32 @@ Add a step to your workflow:
 
 ```yml
 - name: Build-A-Badge
-  uses: peterrhodesdev/build-a-badge@v1.0.2
+  uses: peterrhodesdev/build-a-badge@v1.1.0
   with:
-    filename: test-badge
-    label: "left text"
-    message: "right text"
-    color: blue
+    filename: my-badge
+    label: "my"
+    message: "badge"
 ```
 
 Display the badge in your README:
 
 ```markdown
-![](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/<owner>/<repo>/test-badge.md)
+![](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/<owner>/<repo>/<filename>.md)
 ```
 
-> The JSON badge data is stored in the wiki section of the repo in a file called `<filename>.md`. The username and email of the user who performed the last commit will be used as the details for the commit to the wiki.
+> The JSON badge data is stored in the wiki section of the repo in a file called `<filename>.md`. By default the name of the workflow will be used as the `filename` parameter. The username and email of the user who performed the last commit will be used as the details for the commit to the wiki.
 
 ## Input Parameters
+
+See [shields.io/endpoint](https://shields.io/endpoint) for a list of supported values for the parameters.
 
 | Name | Is required? | Default value | Description |
 | --- | --- | --- | --- |
 | filename | no | ${{ github.workflow }} | The filename to use in the wiki for storing the JSON badge data. The default value is the name of the workflow that runs the action. Because of this, the file name will need to be specified when creating multiple badges per workflow. |
-| label | yes | | The left text of the badge. |
-| message | yes | | The right text of the badge. |
-| color | no | lightgrey | The right color of the badge. See [shields.io/endpoint](https://shields.io/endpoint) for a list of supported values. |
-
+| label | yes | | The left text. |
+| message | yes | | The right text. |
+| color | no | lightgrey | The right color. |
+| labelColor | no | grey | The left color. |
+| namedLogo | no | | Logo supported by Shields. |
+| logoSvg | no | | An SVG string containing a custom logo. |
+| style | no | flat | The default template to use. |
