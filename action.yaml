@@ -26,10 +26,6 @@ inputs:
     description: "Logo supported by Shields"
     required: false
     default: ""
-  logoSvg:
-    description: "An SVG string containing a custom logo"
-    required: false
-    default: ""
   style:
     description: "The default template to use"
     required: false
@@ -57,7 +53,6 @@ runs:
         OPTIONAL_PARAMETERS_ARRAY["color"]=${{ inputs.color }}
         OPTIONAL_PARAMETERS_ARRAY["labelColor"]=${{ inputs.labelColor }}
         OPTIONAL_PARAMETERS_ARRAY["namedLogo"]=${{ inputs.namedLogo }}
-        OPTIONAL_PARAMETERS_ARRAY["logoSvg"]=${{ inputs.logoSvg }}
         OPTIONAL_PARAMETERS_ARRAY["style"]=${{ inputs.style }}
         for key in ${!OPTIONAL_PARAMETERS_ARRAY[@]}; do
           if [[ -n "${OPTIONAL_PARAMETERS_ARRAY[${key}]}" ]]; then

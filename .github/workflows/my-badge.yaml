@@ -1,14 +1,12 @@
 name: Create my badge
-
 on: [push]
-
 jobs:
   my-badge:
     name: My badge job
     runs-on: ubuntu-latest
     steps:
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.1.0
+        uses: peterrhodesdev/build-a-badge@v1.1.1
         with:
           filename: my-badge
           label: "my"

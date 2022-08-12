@@ -15,7 +15,7 @@ Add a step to your workflow:
 
 ```yml
 - name: Build-A-Badge
-  uses: peterrhodesdev/build-a-badge@v1.1.0
+  uses: peterrhodesdev/build-a-badge@v1.1.1
   with:
     filename: my-badge
     label: "my"
@@ -44,5 +44,4 @@ See [shields.io/endpoint](https://shields.io/endpoint) for a list of supported v
 | color | no | lightgrey | The right color. |
 | labelColor | no | grey | The left color. |
 | namedLogo | no | | Logo supported by Shields. |
-| logoSvg | no | | An SVG string containing a custom logo. |
 | style | no | flat | The default template to use. |
