@@ -36,10 +36,12 @@ runs:
       run: |
         cd ./wiki
         echo '{"schemaVersion":1,"label":"${{ inputs.label }}","message":"${{ inputs.message }}","color":"${{ inputs.color }}"}' > "${{ inputs.filename }}.md"
-        git config user.name ${{ steps.user_details.outputs.username }}
-        git config user.email ${{ steps.user_details.outputs.email }}
-        git add -A
-        git commit -m "update from workflow ${{ github.workflow }}"
-        git push
+        if [[ -n $(git status --porcelain) ]]; then
+          git config user.name ${{ steps.user_details.outputs.username }}
+          git config user.email ${{ steps.user_details.outputs.email }}
+          git add -A
+          git commit -m "update from workflow ${{ github.workflow }}"
+          git push
+        fi
         cd ..
       shell: bash
