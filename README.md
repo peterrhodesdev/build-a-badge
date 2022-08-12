@@ -1,6 +1,10 @@
 # Build-A-Badge
 
-Creates dynamic and customizable README badges using [shields.io/endpoint](https://shields.io/endpoint) without any extra steps or configuration required.
+GitHub Action to create dynamic and customizable README badges using [shields.io/endpoint](https://shields.io/endpoint).
+
+This is achieved by storing the required JSON data of the badge in the repository's Wiki. Nothing is committed or pushed to the main repository, and there are no external dependencies that require configuring.
+
+The only requirement is to have at least one page in the Wiki so that it can be cloned. See [here](https://docs.github.com/en/communities/documenting-your-project-with-wikis/adding-or-editing-wiki-pages) for instructions on how to add wiki pages.
 
 - [Usage](#usage)
 - [Input Parameters](#input-parameters)
