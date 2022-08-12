@@ -24,6 +24,8 @@ Display the badge in your README:
 ![](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/<owner>/<repo>/<filename>.md)
 ```
 
+[![my-badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/my-badge.md)](https://github.com/peterrhodesdev/build-a-badge/actions?query=workflow%3Amy-badge)
+
 > The JSON badge data is stored in the wiki section of the repo in a file called `<filename>.md`. By default the name of the workflow will be used as the `filename` parameter. The username and email of the user who performed the last commit will be used as the details for the commit to the wiki.
 
 ## Input Parameters
