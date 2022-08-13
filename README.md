@@ -8,6 +8,8 @@ This is achieved by storing the required JSON data of the badge in the repositor
 
 The only requirement is to have at least one page in the Wiki so that it can be cloned. See [here](https://docs.github.com/en/communities/documenting-your-project-with-wikis/adding-or-editing-wiki-pages) for instructions on how to add wiki pages.
 
+**Note:** if a workflow uses the action multiple times to produce multiple badges then the steps should be run sequentially to avoid merge conflicts in the Wiki, i.e. don't use the action in [multiple jobs that are run in parallel](https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow).
+
 - [Usage](#usage)
 - [Input Parameters](#input-parameters)
 - [Examples](#examples)

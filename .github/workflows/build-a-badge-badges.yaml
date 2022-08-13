@@ -1,8 +1,8 @@
 name: Create Build-A-Badge badges
 on: [push]
 jobs:
-  latest-release-badge:
-    name: Latest release badge
+  build-a-badge-badges:
+    name: Build-A-Badge badges
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo with all tags
@@ -10,21 +10,15 @@ jobs:
         with:
           fetch-depth: 0
       - name: Output latest release
-        id: release
+        id: latest_release
         run: echo "::set-output name=value::$(git describe --tags --abbrev=0)"
       - name: Build-A-Badge latest release
         uses: peterrhodesdev/build-a-badge@v1.1.1
         with:
           filename: build-a-badge-latest-release-badge
           label: "Latest release"
-          message: ${{ steps.release.outputs.value }}
+          message: ${{ steps.latest_release.outputs.value }}
           color: green
-  license-badge:
-    name: License badge
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@v3
       - name: Output license
         id: license
         run: echo "::set-output name=value::$(head -n 1 LICENSE | sed -e 's/\( License\)*$//')"
@@ -35,14 +29,11 @@ jobs:
           label: "License"
           message: ${{ steps.license.outputs.value }}
           color: yellow
-  marketplace-badge:
-    name: Marketplace badge
-    runs-on: ubuntu-latest
-    steps:
-      - name: Marketplace badge
+      - name: Build-A-Badge marketplace
         uses: peterrhodesdev/build-a-badge@v1.1.1
         with:
           filename: build-a-badge-marketplace-badge
           label: "Marketplace"
           message: "Build-A-Badge"
           color: blue
+          namedLogo: GitHub
