@@ -5,8 +5,10 @@ jobs:
     name: Build-A-Badge badges job
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repo
+      - name: Check out repo with all tags (for latest release badge)
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Build-A-Badge latest release
         uses: peterrhodesdev/build-a-badge@v1.1.1
         with:
