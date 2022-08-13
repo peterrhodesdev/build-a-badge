@@ -1,29 +1,45 @@
 name: Create Build-A-Badge badges
 on: [push]
 jobs:
-  build-a-badge-badges:
-    name: Build-A-Badge badges job
+  latest-release-badge:
+    name: Latest release badge
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repo with all tags (for latest release badge)
+      - name: Check out repo with all tags
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - name: Output latest release
+        id: release
+        run: echo "::set-output name=value::$(git describe --tags --abbrev=0)"
       - name: Build-A-Badge latest release
         uses: peterrhodesdev/build-a-badge@v1.1.1
         with:
           filename: build-a-badge-latest-release-badge
-          label: "Lastest release"
-          message: $(git describe --abbrev=0 --tags)
+          label: "Latest release"
+          message: ${{ steps.release.outputs.value }}
           color: green
+  license-badge:
+    name: License badge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+      - name: Output license
+        id: license
+        run: echo "::set-output name=value::$(head -n 1 LICENSE | sed -e 's/\( License\)*$//')"
       - name: Build-A-Badge license
         uses: peterrhodesdev/build-a-badge@v1.1.1
         with:
           filename: build-a-badge-license-badge
           label: "License"
-          message: $(head -n 1 LICENSE | sed -e 's/\( License\)*$//')
+          message: ${{ steps.license.outputs.value }}
           color: yellow
-      - name: Build-A-Badge license
+  marketplace-badge:
+    name: Marketplace badge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Marketplace badge
         uses: peterrhodesdev/build-a-badge@v1.1.1
         with:
           filename: build-a-badge-marketplace-badge
