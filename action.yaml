@@ -35,11 +35,12 @@ runs:
   steps:
     - name: Check out repo
       uses: actions/checkout@v3
-    - name: Output user details
-      id: user_details
+    - name: Output last commit details
+      id: last_commit
       run: |
         echo "::set-output name=username::$(git log -n 1 --pretty=format:%an)"
         echo "::set-output name=email::$(git log -n 1 --pretty=format:%ae)"
+        echo "::set-output name=hash::$(git log -n 1 --pretty=format:"%H")"
       shell: bash
     - name: Check out wiki
       uses: actions/checkout@v3
@@ -63,10 +64,10 @@ runs:
         cd ./wiki
         echo $BADGE_JSON > "${{ inputs.filename }}.md"
         if [[ -n $(git status --porcelain) ]]; then
-          git config user.name ${{ steps.user_details.outputs.username }}
-          git config user.email ${{ steps.user_details.outputs.email }}
+          git config user.name ${{ steps.last_commit.outputs.username }}
+          git config user.email ${{ steps.last_commit.outputs.email }}
           git add -A
-          git commit -m "update from workflow ${{ github.workflow }}"
+          git commit -m "https://github.com/$GITHUB_REPOSITORY/commit/${{ steps.last_commit.outputs.hash }}"
           git push
         fi
         cd ..
