@@ -20,11 +20,11 @@ Add a step to your workflow:
 
 ```yml
 - name: Build-A-Badge
-  uses: peterrhodesdev/build-a-badge@v1.1.1
+  uses: peterrhodesdev/build-a-badge@v1.2.0
   with:
     filename: my-badge
-    label: "my"
-    message: "badge"
+    label: my
+    message: badge
 ```
 
 Display the badge in your README:
@@ -73,7 +73,7 @@ jobs:
         id: last_commit
         run: echo "::set-output name=value::$(git log -1 --format=%cd)"
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.1.1
+        uses: peterrhodesdev/build-a-badge@v1.2.0
         with:
           filename: last-commit-badge
           label: "Last commit"
