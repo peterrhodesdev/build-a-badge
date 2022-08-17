@@ -1,0 +1,17 @@
+name: Create multiple badges
+on: [push]
+jobs:
+  test-badge:
+    name: Multiple badges
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build-A-Badge multiple
+        uses: peterrhodesdev/build-a-badge@v1.2.0
+        with:
+          filename: ("multiple-badges-1" "multiple-badges-2" "multiple-badges-3" "multiple-badges-4" "multiple-badges-5")
+          label: ("label 1" "label 2" "label 3" "label 4" "label 5")
+          message: ("message 1" "message 2" "message 3" "message 4" "message 5")
+          color: ("darkslategrey" "008b8b" 'rgb(128,0,128)' 'hsl(229,100%,50%)' "")
+          labelColor: ("critical" "9cf" 'rgba(72,209,204,0.5)' 'hsla(36,80%,40%,0.7)' "")
+          namedLogo: ("github" "" "npm" "" "javascript")
+          style: ("" "plastic" "flat-square" "for-the-badge" "social")
