@@ -1,7 +1,7 @@
 name: Create multiple badges
 on: [push]
 jobs:
-  test-badge:
+  multiple-badges:
     name: Multiple badges
     runs-on: ubuntu-latest
     steps:

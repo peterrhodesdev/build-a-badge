@@ -89,7 +89,7 @@ See [Shields.io](https://shields.io/) and the [endpoint](https://shields.io/endp
 
 | Name | Is required? | Default value | Description |
 | --- | --- | --- | --- |
-| filename | yes | | The filename to use in the wiki for storing the JSON badge data. |
+| filename | yes | | The filename to use in the wiki for storing the JSON badge data. It cannot contain any whitespace characters. |
 | label | yes | | The left text. |
 | message | yes | | The right text. |
 | color | no | lightgrey | The right color. |
