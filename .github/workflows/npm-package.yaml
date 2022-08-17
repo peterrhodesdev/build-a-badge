@@ -1,0 +1,54 @@
+name: Create npm package badges
+on: [push]
+jobs:
+  npm-package-badges:
+    name: npm package badges
+    runs-on: ubuntu-latest
+    env:
+      NPM_PACKAGE_NAME: react
+    steps:
+      - name: Request JSON data from Bundlephobia
+        id: bundlephobia
+        run: echo "::set-output name=json::$(curl https://bundlephobia.com/api/size?package=$NPM_PACKAGE_NAME)"
+        shell: bash
+      - name: Output NPM package details
+        id: npm_package_details
+        run: |
+          echo "::set-output name=version::$(jq -r '.version' <<< '${{ steps.bundlephobia.outputs.json }}')"
+          echo "::set-output name=license::$(npm view $NPM_PACKAGE_NAME license)"
+          echo "::set-output name=size_unpacked::$(numfmt --to iec --suffix B <<< $(npm view $NPM_PACKAGE_NAME dist.unpackedSize))"
+          echo "::set-output name=size_minified::$(numfmt --to iec --suffix B <<< $(jq '.size' <<< '${{ steps.bundlephobia.outputs.json }}'))"
+          echo "::set-output name=size_minified_gzip::$(numfmt --to iec --suffix B <<< $(jq '.gzip' <<< '${{ steps.bundlephobia.outputs.json }}'))"
+          echo "::set-output name=dependency_count::$(jq '.dependencyCount' <<< '${{ steps.bundlephobia.outputs.json }}')"
+      - name: Build-A-Badge npm package
+        uses: peterrhodesdev/build-a-badge@v1.2.1
+        with:
+          filename: |
+            (
+              "npm-package-version"
+              "npm-package-license"
+              "npm-package-size-unpacked"
+              "npm-package-size-minified"
+              "npm-package-size-minified-gzip"
+              "npm-package-dependency-count"
+            )
+          label: |
+            (
+              "version"
+              "license"
+              "unpacked size"
+              "minified size"
+              "minified + gzipped size"
+              "dependencies"
+            )
+          message: |
+            (
+              "${{ steps.npm_package_details.outputs.version }}"
+              "${{ steps.npm_package_details.outputs.license }}"
+              "${{ steps.npm_package_details.outputs.size_unpacked }}"
+              "${{ steps.npm_package_details.outputs.size_minified }}"
+              "${{ steps.npm_package_details.outputs.size_minified_gzip }}"
+              "${{ steps.npm_package_details.outputs.dependency_count }}"
+            )
+          namedLogo: ("npm" "npm" "npm" "npm" "npm" "npm")
+          color: ("blue" "yellow" "purple" "orange" "green" "red")

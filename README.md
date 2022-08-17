@@ -45,7 +45,7 @@ So, for the badge above it will be:
 
 ### Multiple badges
 
-![multiple-badges-1](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/test-coverage/multiple-badges-1.md) ![multiple-badges-2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/test-coverage/multiple-badges-2.md) ![multiple-badges-3](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/test-coverage/multiple-badges-3.md) ![multiple-badges-4](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/test-coverage/multiple-badges-4.md) ![multiple-badges-5](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/test-coverage/multiple-badges-5.md)
+![multiple-badges-1](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/multiple-badges-1.md) ![multiple-badges-2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/multiple-badges-2.md) ![multiple-badges-3](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/multiple-badges-3.md) ![multiple-badges-4](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/multiple-badges-4.md) ![multiple-badges-5](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/multiple-badges-5.md)
 
 The input parameters also support arrays so that multiple badges can be created in a single workflow step.
 
@@ -76,11 +76,11 @@ jobs:
 Add the badges to the README according to the `filename` specified for each:
 
 ```markdown
-![multiple-badges-1](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/test-coverage/multiple-badges-1.md)
-![multiple-badges-2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/test-coverage/multiple-badges-2.md)
-![multiple-badges-3](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/test-coverage/multiple-badges-3.md)
-![multiple-badges-4](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/test-coverage/multiple-badges-4.md)
-![multiple-badges-5](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/test-coverage/multiple-badges-5.md)
+![multiple-badges-1](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/multiple-badges-1.md)
+![multiple-badges-2](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/multiple-badges-2.md)
+![multiple-badges-3](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/multiple-badges-3.md)
+![multiple-badges-4](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/multiple-badges-4.md)
+![multiple-badges-5](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/multiple-badges-5.md)
 ```
 
 ## Input Parameters
@@ -100,6 +100,9 @@ See [Shields.io](https://shields.io/) and the [endpoint](https://shields.io/endp
 > Each parameter supports either a single value or an array. Only one or the other is supported, i.e. either all parameters need to be single or all parameters need to be an array.
 
 ## Examples
+
+- [Custom logo](#custom-logo)
+- [npm package](#npm-package)
 
 ### Custom logo
 
@@ -142,4 +145,76 @@ The steps to include a custom logo in the badge like the one above are are:
 
 ```markdown
 ![](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/last-commit-badge.md&logo=data:image/svg%2bxml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeD0iMCIgeT0iMCIgdmlld0JveD0iMCAwIDEyMi45IDEyMCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTIyLjg4IDExOS45NyIgZmlsbD0iI0ZGRkZGRiI+PHBhdGggZD0iTTY5LjggNGMwLTIuMiAyLjItNCA1LTRzNC45IDEuOCA0LjkgNHYxNy44YzAgMi4yLTIuMiA0LTUgNHMtNS0xLjgtNS00VjQuMXpNMTQuNCA3OGgxMS4zYy43IDAgMS4zLjYgMS4zIDEuNHY4LjNjMCAuOC0uNiAxLjMtMS4zIDEuM0gxNC40Yy0uOCAwLTEuMy0uNS0xLjMtMS4zdi04LjNjMC0uOC42LTEuNCAxLjMtMS40em00My40LTIzLjhINjljLjQgMCAuNy4xIDEgLjNhNDAuNCA0MC40IDAgMCAwLTExLjQgMTAuN2gtMWMtLjYgMC0xLjItLjYtMS4yLTEuM3YtOC40YzAtLjcuNi0xLjMgMS4zLTEuM3ptLTIxLjcgMGgxMS4zYy43IDAgMS4zLjYgMS4zIDEuM3Y4LjRjMCAuNy0uNiAxLjMtMS4zIDEuM0gzNi4xYy0uNyAwLTEuMy0uNi0xLjMtMS4zdi04LjRjMC0uNy42LTEuMyAxLjMtMS4zem0tMjEuNyAwaDExLjNjLjcgMCAxLjMuNiAxLjMgMS4zdjguNGMwIC43LS42IDEuMy0xLjMgMS4zSDE0LjRjLS44IDAtMS4zLS42LTEuMy0xLjN2LTguNGMwLS43LjYtMS4zIDEuMy0xLjN6TTM2IDc4aDExLjNjLjcgMCAxLjMuNiAxLjMgMS40djguM2MwIC44LS42IDEuMy0xLjMgMS4zSDM2LjFjLS43IDAtMS4zLS41LTEuMy0xLjN2LTguM2MwLS44LjYtMS40IDEuMy0xLjR6bTY3LjQtMTguNWEzMS40IDMxLjQgMCAxIDEtMjQgNTggMzEuNCAzMS40IDAgMCAxIDI0LTU4ek04Ni42IDg3LjdsMS40LTFWNzNhMi41IDIuNSAwIDAgMSA1IDB2MTMuNmMxIC41IDEuOCAxLjMgMi4yIDIuMmg5LjhhMi41IDIuNSAwIDEgMSAwIDVoLTkuN2E1LjMgNS4zIDAgMSAxLTguNy02em0yMy41LTE3LjNjLTEzLTEzLTM1LTkuMy00Mi41IDdhMjYuMyAyNi4zIDAgMSAwIDQ3LjYtLjRjLTEuMy0yLjYtMy00LjUtNS02LjZ6TTI1LjMgNC4xYzAtMi4zIDIuMi00LjEgNS00LjEgMi43IDAgNSAxLjggNSA0djE3LjhjMCAyLjItMi4zIDQtNSA0LTIuOCAwLTUtMS44LTUtNFY0LjF6TTUuNCAzOC44aDk0LjNWMTguNGMwLS43LS4zLTEuMy0uOC0xLjgtLjQtLjQtMS0uNy0xLjctLjdoLTlhMi43IDIuNyAwIDAgMSAwLTUuNWg5YTggOCAwIDAgMSA4IDh2MzIuNGE0MSA0MSAwIDAgMC01LjYtMS41di01SDUuNnY1Mi45YzAgLjcuMiAxLjMuNyAxLjcuNC41IDEgLjggMS43LjhoNDQuOGMuNSAxLjkgMS4yIDMuNyAyIDUuNUg4YTggOCAwIDAgMS04LThWMTguNGE4IDggMCAwIDEgOC04aDkuNmEyLjcgMi43IDAgMCAxIDAgNS41SDhjLS43IDAtMS4zLjMtMS44LjctLjQuNS0uNyAxLjEtLjcgMS44djIwLjR6bTM3LjctMjNhMi43IDIuNyAwIDAgMSAwLTUuNGgxOC40YTIuNyAyLjcgMCAwIDEgMCA1LjVINDMuMXoiLz48L3N2Zz4=)
+```
+
+### npm package
+
+![npm-package-version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-version.md) ![npm-package-license](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-license.md) ![npm-package-size-unpacked](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-unpacked.md) ![npm-package-size-minified](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified.md) ![npm-package-size-minified-gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified-gzip.md) ![npm-package-dependency-count](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-dependency-count.md)
+
+Badges for an npm package ([react](https://www.npmjs.com/package/react) in this example) using the results from the [Bundlephobia](https://bundlephobia.com/) API along with the `npm view` command.
+
+```yml
+name: Create npm package badges
+on: [push]
+jobs:
+  npm-package-badges:
+    name: npm package badges
+    runs-on: ubuntu-latest
+    env:
+      NPM_PACKAGE_NAME: react
+    steps:
+      - name: Request JSON data from Bundlephobia
+        id: bundlephobia
+        run: echo "::set-output name=json::$(curl https://bundlephobia.com/api/size?package=$NPM_PACKAGE_NAME)"
+        shell: bash
+      - name: Output NPM package details
+        id: npm_package_details
+        run: |
+          echo "::set-output name=version::$(jq -r '.version' <<< '${{ steps.bundlephobia.outputs.json }}')"
+          echo "::set-output name=license::$(npm view $NPM_PACKAGE_NAME license)"
+          echo "::set-output name=size_unpacked::$(numfmt --to iec --suffix B <<< $(npm view $NPM_PACKAGE_NAME dist.unpackedSize))"
+          echo "::set-output name=size_minified::$(numfmt --to iec --suffix B <<< $(jq '.size' <<< '${{ steps.bundlephobia.outputs.json }}'))"
+          echo "::set-output name=size_minified_gzip::$(numfmt --to iec --suffix B <<< $(jq '.gzip' <<< '${{ steps.bundlephobia.outputs.json }}'))"
+          echo "::set-output name=dependency_count::$(jq '.dependencyCount' <<< '${{ steps.bundlephobia.outputs.json }}')"
+      - name: Build-A-Badge npm package
+        uses: peterrhodesdev/build-a-badge@v1.2.1
+        with:
+          filename: |
+            (
+              "npm-package-version"
+              "npm-package-license"
+              "npm-package-size-unpacked"
+              "npm-package-size-minified"
+              "npm-package-size-minified-gzip"
+              "npm-package-dependency-count"
+            )
+          label: |
+            (
+              "version"
+              "license"
+              "unpacked size"
+              "minified size"
+              "minified + gzipped size"
+              "dependencies"
+            )
+          message: |
+            (
+              "${{ steps.npm_package_details.outputs.version }}"
+              "${{ steps.npm_package_details.outputs.license }}"
+              "${{ steps.npm_package_details.outputs.size_unpacked }}"
+              "${{ steps.npm_package_details.outputs.size_minified }}"
+              "${{ steps.npm_package_details.outputs.size_minified_gzip }}"
+              "${{ steps.npm_package_details.outputs.dependency_count }}"
+            )
+          namedLogo: ("npm" "npm" "npm" "npm" "npm" "npm")
+          color: ("blue" "yellow" "purple" "orange" "green" "red")
+```
+
+```markdown
+![npm-package-version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-version.md)
+![npm-package-license](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-license.md)
+![npm-package-size-unpacked](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-unpacked.md)
+![npm-package-size-minified](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified.md)
+![npm-package-size-minified-gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified-gzip.md)
+![npm-package-dependency-count](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-dependency-count.md)
 ```
