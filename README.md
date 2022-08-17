@@ -22,7 +22,7 @@ Add a step to your workflow:
 
 ```yml
 - name: Build-A-Badge
-  uses: peterrhodesdev/build-a-badge@v1.2.0
+  uses: peterrhodesdev/build-a-badge@v1.2.1
   with:
     filename: my-badge
     label: my
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build-A-Badge multiple
-        uses: peterrhodesdev/build-a-badge@v1.2.0
+        uses: peterrhodesdev/build-a-badge@v1.2.1
         with:
           filename: ("multiple-badges-1" "multiple-badges-2" "multiple-badges-3" "multiple-badges-4" "multiple-badges-5")
           label: ("label 1" "label 2" "label 3" "label 4" "label 5")
@@ -123,7 +123,7 @@ jobs:
         id: last_commit
         run: echo "::set-output name=value::$(git log -1 --format=%cd)"
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.2.0
+        uses: peterrhodesdev/build-a-badge@v1.2.1
         with:
           filename: last-commit-badge
           label: "Last commit"
