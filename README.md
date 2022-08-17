@@ -8,13 +8,13 @@ This is achieved by storing the required JSON data of the badge in the repositor
 
 The only requirement is to have at least one page in the Wiki so that it can be cloned. See [here](https://docs.github.com/en/communities/documenting-your-project-with-wikis/adding-or-editing-wiki-pages) for instructions on how to add wiki pages.
 
-**Note:** if a workflow uses the action multiple times to produce multiple badges then the steps should be run sequentially to avoid merge conflicts in the Wiki, i.e. don't use the action in [multiple jobs that are run in parallel](https://docs.github.com/en/actions/using-jobs/using-jobs-in-a-workflow).
-
 - [Usage](#usage)
 - [Input Parameters](#input-parameters)
 - [Examples](#examples)
 
 ## Usage
+
+### Single Badge
 
 Add a step to your workflow:
 
@@ -27,15 +27,21 @@ Add a step to your workflow:
     message: badge
 ```
 
-Display the badge in your README:
+To display the badge in your README point the `url` parameter of the Shields endpoint query string to the raw content of the generated Wiki file:
 
 ```markdown
 ![](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/<owner>/<repo>/<filename>.md)
 ```
 
-[![my-badge](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/my-badge.md)](https://github.com/peterrhodesdev/build-a-badge/actions?query=workflow%3Amy-badge)
+So, for the badge above it will be:
 
-> The JSON badge data is stored in the wiki section of the repo in a file called `<filename>.md`. By default the name of the workflow will be used as the `filename` parameter. The username and email of the user who performed the last commit will be used as the details for the commit to the wiki.
+```markdown
+![](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/my-badge.md)
+```
+
+![](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/my-badge.md)
+
+> The JSON badge data is stored in the wiki section of the repo in a file called `<filename>.md`. The username and email of the user who performed the last commit will be used as the details for the commit to the wiki. Alos, the commit message will contain a link to the commit that triggered the badge data update.
 
 ## Input Parameters
 
@@ -43,7 +49,7 @@ See [shields.io/endpoint](https://shields.io/endpoint) for a list of supported v
 
 | Name | Is required? | Default value | Description |
 | --- | --- | --- | --- |
-| filename | no | ${{ github.workflow }} | The filename to use in the wiki for storing the JSON badge data. The default value is the name of the workflow that runs the action. Because of this, the file name will need to be specified when creating multiple badges per workflow. |
+| filename | yes | | The filename to use in the wiki for storing the JSON badge data. |
 | label | yes | | The left text. |
 | message | yes | | The right text. |
 | color | no | lightgrey | The right color. |

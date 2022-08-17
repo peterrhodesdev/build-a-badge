@@ -6,8 +6,7 @@ branding:
 inputs:
   filename:
     description: "The filename to use in the wiki for storing the JSON badge data"
-    required: false
-    default: ${{ github.workflow }}
+    required: true
   label:
     description: "The left text, or the empty string to omit the left side of the badge"
     required: true
