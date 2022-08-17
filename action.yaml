@@ -33,6 +33,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Output number of badges
+      id: number_of_badges
+      run: |
+        declare -a BAB_INPUTS_FILENAME_ARRAY=${{ inputs.filename }}
+        echo "::set-output name=value::$(echo ${#BAB_INPUTS_FILENAME_ARRAY[@]})"
+      shell: bash
     - name: Check out repo
       uses: actions/checkout@v3
     - name: Output last commit details
@@ -49,20 +55,59 @@ runs:
         path: wiki
     - name: Update wiki
       run: |
-        BADGE_JSON="{\"schemaVersion\":1,\"label\":\"${{ inputs.label }}\",\"message\":\"${{ inputs.message }}\""
-        declare -A OPTIONAL_PARAMETERS_ARRAY
-        OPTIONAL_PARAMETERS_ARRAY["color"]=${{ inputs.color }}
-        OPTIONAL_PARAMETERS_ARRAY["labelColor"]=${{ inputs.labelColor }}
-        OPTIONAL_PARAMETERS_ARRAY["namedLogo"]=${{ inputs.namedLogo }}
-        OPTIONAL_PARAMETERS_ARRAY["style"]=${{ inputs.style }}
-        for key in ${!OPTIONAL_PARAMETERS_ARRAY[@]}; do
-          if [[ -n "${OPTIONAL_PARAMETERS_ARRAY[${key}]}" ]]; then
-            BADGE_JSON="$BADGE_JSON,\"$key\":\"${OPTIONAL_PARAMETERS_ARRAY[${key}]}\""
-          fi
-        done
-        BADGE_JSON="$BADGE_JSON}"
         cd ./wiki
-        echo $BADGE_JSON > "${{ inputs.filename }}.md"
+
+        if [[ ${{ steps.number_of_badges.outputs.value }} -eq 1 ]]; then
+          BAB_INPUTS_FILENAME="${{ inputs.filename }}"
+          BAB_INPUTS_LABEL="${{ inputs.label }}"
+          BAB_INPUTS_MESSAGE="${{ inputs.message }}"
+          BAB_INPUTS_COLOR="${{ inputs.color }}"
+          BAB_INPUTS_LABELCOLOR="${{ inputs.labelColor }}"
+          BAB_INPUTS_NAMEDLOGO="${{ inputs.namedLogo }}"
+          BAB_INPUTS_STYLE="${{ inputs.style }}"
+        else
+          declare -a BAB_INPUTS_FILENAME_ARRAY=${{ inputs.filename }}
+          declare -a BAB_INPUTS_LABEL_ARRAY=${{ inputs.label }}
+          declare -a BAB_INPUTS_MESSAGE_ARRAY=${{ inputs.message }}
+          declare -a BAB_INPUTS_COLOR_ARRAY=${{ inputs.color }}
+          declare -a BAB_INPUTS_LABELCOLOR_ARRAY=${{ inputs.labelColor }}
+          declare -a BAB_INPUTS_NAMEDLOGO_ARRAY=${{ inputs.namedLogo }}
+          declare -a BAB_INPUTS_STYLE_ARRAY=${{ inputs.style }}
+        fi
+
+        for i in {1..${{ steps.number_of_badges.outputs.value }}}; do
+          BADGE_JSON="{\"schemaVersion\":1"
+
+          if [[ ${{ steps.number_of_badges.outputs.value }} -ne 1 ]]; then
+            BAB_INPUTS_FILENAME=${BAB_INPUTS_FILENAME_ARRAY[i-1]}
+            BAB_INPUTS_LABEL=${BAB_INPUTS_LABEL_ARRAY[i-1]}
+            BAB_INPUTS_MESSAGE=${BAB_INPUTS_MESSAGE_ARRAY[i-1]}
+            BAB_INPUTS_COLOR=${BAB_INPUTS_COLOR_ARRAY[i-1]}
+            BAB_INPUTS_LABELCOLOR=${BAB_INPUTS_LABELCOLOR_ARRAY[i-1]}
+            BAB_INPUTS_NAMEDLOGO=${BAB_INPUTS_NAMEDLOGO_ARRAY[i-1]}
+            BAB_INPUTS_STYLE=${BAB_INPUTS_STYLE_ARRAY[i-1]}
+          fi
+
+          BADGE_JSON="$BADGE_JSON,\"label\":\"$BAB_INPUTS_LABEL\""
+          BADGE_JSON="$BADGE_JSON,\"message\":\"$BAB_INPUTS_MESSAGE\""
+          
+          declare -A OPTIONAL_PARAMETERS_ARRAY
+          OPTIONAL_PARAMETERS_ARRAY["color"]=$BAB_INPUTS_COLOR
+          OPTIONAL_PARAMETERS_ARRAY["labelColor"]=$BAB_INPUTS_LABELCOLOR
+          OPTIONAL_PARAMETERS_ARRAY["namedLogo"]=$BAB_INPUTS_NAMEDLOGO
+          OPTIONAL_PARAMETERS_ARRAY["style"]=$BAB_INPUTS_STYLE
+
+          for key in ${!OPTIONAL_PARAMETERS_ARRAY[@]}; do
+            if [[ -n "${OPTIONAL_PARAMETERS_ARRAY[${key}]}" ]]; then
+              BADGE_JSON="$BADGE_JSON,\"$key\":\"${OPTIONAL_PARAMETERS_ARRAY[${key}]}\""
+            fi
+          done
+          BADGE_JSON="$BADGE_JSON}"
+          
+          echo $BADGE_JSON > "$BAB_INPUTS_FILENAME.md"
+        done
+
+        git pull
         if [[ -n $(git status --porcelain) ]]; then
           git config user.name ${{ steps.last_commit.outputs.username }}
           git config user.email ${{ steps.last_commit.outputs.email }}
@@ -70,5 +115,6 @@ runs:
           git commit -m "https://github.com/$GITHUB_REPOSITORY/commit/${{ steps.last_commit.outputs.hash }}"
           git push
         fi
+
         cd ..
       shell: bash
