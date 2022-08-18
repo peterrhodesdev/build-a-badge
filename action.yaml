@@ -4,6 +4,9 @@ branding:
   icon: "shield"
   color: "blue"
 inputs:
+  token:
+    description: "Used for authentication"
+    required: true
   filename:
     description: "The filename to use in the wiki for storing the JSON badge data"
     required: true
@@ -40,6 +43,8 @@ runs:
       shell: bash
     - name: Check out repo
       uses: actions/checkout@v3
+      with:
+        token: ${{ inputs.token }}
     - name: Output last commit details
       id: last_commit
       run: |
@@ -50,6 +55,7 @@ runs:
     - name: Check out wiki
       uses: actions/checkout@v3
       with:
+        token: ${{ inputs.token }}
         repository: "${{ github.repository }}.wiki"
         path: wiki
     - name: Update wiki

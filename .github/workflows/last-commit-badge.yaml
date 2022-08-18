@@ -13,6 +13,7 @@ jobs:
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.2.1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           filename: last-commit-badge
           label: "Last commit"
           message: ${{ steps.last_commit.outputs.value }}

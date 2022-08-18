@@ -18,6 +18,7 @@ jobs:
       - name: Build-A-Badge badges
         uses: peterrhodesdev/build-a-badge@v1.2.1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
             (
               "build-a-badge-latest-release-badge"

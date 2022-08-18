@@ -27,6 +27,7 @@ jobs:
       - name: Build-A-Badge npm package
         uses: peterrhodesdev/build-a-badge@v1.2.1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
             (
               "npm-package-version"
