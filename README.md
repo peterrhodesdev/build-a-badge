@@ -24,6 +24,7 @@ Add a step to your workflow:
 - name: Build-A-Badge
   uses: peterrhodesdev/build-a-badge@v1.2.1
   with:
+    token: ${{ secrets.GITHUB_TOKEN }}
     filename: my-badge
     label: my
     message: badge
@@ -49,7 +50,7 @@ So, for the badge above it will be:
 
 The input parameters also support arrays so that multiple badges can be created in a single workflow step.
 
-```markdown
+```yml
 name: Create multiple badges
 on: [push]
 jobs:
@@ -60,6 +61,7 @@ jobs:
       - name: Build-A-Badge multiple
         uses: peterrhodesdev/build-a-badge@v1.2.1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           filename: ("multiple-badges-1" "multiple-badges-2" "multiple-badges-3" "multiple-badges-4" "multiple-badges-5")
           label: ("label 1" "label 2" "label 3" "label 4" "label 5")
           message: ("message 1" "message 2" "message 3" "message 4" "message 5")
@@ -128,6 +130,7 @@ jobs:
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.2.1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           filename: last-commit-badge
           label: "Last commit"
           message: ${{ steps.last_commit.outputs.value }}
@@ -183,6 +186,7 @@ jobs:
       - name: Build-A-Badge npm package
         uses: peterrhodesdev/build-a-badge@v1.2.1
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
             (
               "npm-package-version"
