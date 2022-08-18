@@ -149,9 +149,9 @@ The steps to include a custom logo in the badge like the one above are are:
 
 ### npm package
 
-![npm-package-version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-version.md) ![npm-package-license](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-license.md) ![npm-package-size-unpacked](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-unpacked.md) ![npm-package-size-minified](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified.md) ![npm-package-size-minified-gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified-gzip.md) ![npm-package-dependency-count](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-dependency-count.md)
+![npm-package-version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-version.md) ![npm-package-license](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-license.md) ![npm-package-size-unpacked](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-unpacked.md) ![npm-package-size-minified](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified.md) ![npm-package-size-minified-gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified-gzip.md) ![npm-package-dependency-count](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-dependency-count.md) ![npm-package-downloads](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-downloads.md)
 
-Badges for an npm package ([react](https://www.npmjs.com/package/react) in this example) using the results from the [Bundlephobia](https://bundlephobia.com/) API along with the `npm view` command.
+Badges for an npm package ([react](https://www.npmjs.com/package/react) in this example) using the results from the `npm view` command as well as the [npm registry](https://github.com/npm/registry/blob/master/docs/download-counts.md) and [Bundlephobia](https://bundlephobia.com/) APIs.
 
 ```yml
 name: Create npm package badges
@@ -170,12 +170,16 @@ jobs:
       - name: Output NPM package details
         id: npm_package_details
         run: |
-          echo "::set-output name=version::$(jq -r '.version' <<< '${{ steps.bundlephobia.outputs.json }}')"
+          function format_size { echo $(numfmt --to iec --suffix B $1); }
+          function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
+          echo "::set-output name=version::$(npm view $NPM_PACKAGE_NAME dist-tags.latest)"
           echo "::set-output name=license::$(npm view $NPM_PACKAGE_NAME license)"
-          echo "::set-output name=size_unpacked::$(numfmt --to iec --suffix B <<< $(npm view $NPM_PACKAGE_NAME dist.unpackedSize))"
-          echo "::set-output name=size_minified::$(numfmt --to iec --suffix B <<< $(jq '.size' <<< '${{ steps.bundlephobia.outputs.json }}'))"
-          echo "::set-output name=size_minified_gzip::$(numfmt --to iec --suffix B <<< $(jq '.gzip' <<< '${{ steps.bundlephobia.outputs.json }}'))"
+          echo "::set-output name=size_unpacked::$(format_size $(npm view $NPM_PACKAGE_NAME dist.unpackedSize))"
+          echo "::set-output name=size_minified::$(format_size $(jq '.size' <<< '${{ steps.bundlephobia.outputs.json }}'))"
+          echo "::set-output name=size_minified_gzip::$(format_size $(jq '.gzip' <<< '${{ steps.bundlephobia.outputs.json }}'))"
           echo "::set-output name=dependency_count::$(jq '.dependencyCount' <<< '${{ steps.bundlephobia.outputs.json }}')"
+          echo "::set-output name=downloads::$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))"
+        shell: bash
       - name: Build-A-Badge npm package
         uses: peterrhodesdev/build-a-badge@v1.2.1
         with:
@@ -187,6 +191,7 @@ jobs:
               "npm-package-size-minified"
               "npm-package-size-minified-gzip"
               "npm-package-dependency-count"
+              "npm-package-downloads"
             )
           label: |
             (
@@ -196,6 +201,7 @@ jobs:
               "minified size"
               "minified + gzipped size"
               "dependencies"
+              "downloads last week"
             )
           message: |
             (
@@ -205,9 +211,10 @@ jobs:
               "${{ steps.npm_package_details.outputs.size_minified }}"
               "${{ steps.npm_package_details.outputs.size_minified_gzip }}"
               "${{ steps.npm_package_details.outputs.dependency_count }}"
+              "${{ steps.npm_package_details.outputs.downloads }}"
             )
-          namedLogo: ("npm" "npm" "npm" "npm" "npm" "npm")
-          color: ("blue" "yellow" "purple" "orange" "green" "red")
+          namedLogo: ("npm" "npm" "npm" "npm" "npm" "npm" "npm")
+          color: ("blue" "yellow" "purple" "orange" "green" "red" "")
 ```
 
 ```markdown
@@ -217,4 +224,5 @@ jobs:
 ![npm-package-size-minified](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified.md)
 ![npm-package-size-minified-gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified-gzip.md)
 ![npm-package-dependency-count](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-dependency-count.md)
+![npm-package-downloads](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-downloads.md)
 ```
