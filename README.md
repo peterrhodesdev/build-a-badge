@@ -6,13 +6,15 @@ GitHub Action to create dynamic and customizable README badges using the [Shield
 
 This is achieved by storing the required JSON data of the badge in the repository's Wiki. Nothing is committed or pushed to the main repository, and there are no external dependencies that require configuring.
 
-The only requirement is to have at least one page in the Wiki so that it can be cloned. See [here](https://docs.github.com/en/communities/documenting-your-project-with-wikis/adding-or-editing-wiki-pages) for instructions on how to add wiki pages.
+The only requirement is to have at least one page in your repository's Wiki.
 
 - [Usage](#usage)
 - [Input Parameters](#input-parameters)
 - [Examples](#examples)
 
 ## Usage
+
+Before using the action there must be **at least one page in your repository's Wiki** so that it can be used to store the badge data. See [here](https://docs.github.com/en/communities/documenting-your-project-with-wikis/adding-or-editing-wiki-pages) for instructions on how to add wiki pages.
 
 ### Single Badge
 
