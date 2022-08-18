@@ -22,7 +22,7 @@ Add a step to your workflow:
 
 ```yml
 - name: Build-A-Badge
-  uses: peterrhodesdev/build-a-badge@v1.2.1
+  uses: peterrhodesdev/build-a-badge@v1.2.2
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
     filename: my-badge
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build-A-Badge multiple
-        uses: peterrhodesdev/build-a-badge@v1.2.1
+        uses: peterrhodesdev/build-a-badge@v1.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: ("multiple-badges-1" "multiple-badges-2" "multiple-badges-3" "multiple-badges-4" "multiple-badges-5")
@@ -91,6 +91,7 @@ See [Shields.io](https://shields.io/) and the [endpoint](https://shields.io/endp
 
 | Name | Is required? | Default value | Description |
 | --- | --- | --- | --- |
+| token | yes | | GitHub token secret used for authentication. The value [automatically created by GitHub](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) can be used: `${{ secrets.GITHUB_TOKEN }}`. |
 | filename | yes | | The filename to use in the wiki for storing the JSON badge data. It cannot contain any whitespace characters. |
 | label | yes | | The left text. |
 | message | yes | | The right text. |
@@ -128,7 +129,7 @@ jobs:
         id: last_commit
         run: echo "::set-output name=value::$(git log -1 --format=%cd)"
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.2.1
+        uses: peterrhodesdev/build-a-badge@v1.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: last-commit-badge
@@ -184,7 +185,7 @@ jobs:
           echo "::set-output name=downloads::$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))"
         shell: bash
       - name: Build-A-Badge npm package
-        uses: peterrhodesdev/build-a-badge@v1.2.1
+        uses: peterrhodesdev/build-a-badge@v1.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
