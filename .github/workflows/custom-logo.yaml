@@ -1,0 +1,14 @@
+name: Create custom logo badge
+on: [push]
+jobs:
+  custom-logo-badge:
+    name: Custom logo badge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build-A-Badge
+        uses: peterrhodesdev/build-a-badge@v1.2.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          filename: custom-logo-badge
+          label: custom
+          message: logo
