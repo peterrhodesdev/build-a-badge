@@ -16,7 +16,7 @@ jobs:
         id: license
         run: echo "::set-output name=value::$(head -n 1 LICENSE | sed -e 's/\( License\)*$//')"
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.2.2
+        uses: peterrhodesdev/build-a-badge@v1.2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |

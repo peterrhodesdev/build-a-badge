@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.2.2
+        uses: peterrhodesdev/build-a-badge@v1.2.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: custom-logo-badge
