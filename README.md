@@ -105,7 +105,9 @@ See [Shields.io](https://shields.io/) and the [endpoint](https://shields.io/endp
 | wikiCommitEmail | no | email from the last commit | no | Override for the wiki commit email. |
 | wikiCommitMessage | no | URL link to the last commit | no | Override for the wiki commit message. |
 
-> Parameters marked as "Array supported" can be specified using either a single value or an array. Note that only one or the other is allowed, i.e. either all applicable parameters need to be single values or they all need to be arrays.
+Parameters marked as *Array supported* can be specified using either a single value or an array. Note that only one or the other is allowed, i.e. either all applicable parameters need to be single values or they all need to be arrays.
+
+If `wikiCommitUsername`, `wikiCommitEmail`, and `wikiCommitMessage` are all overridden, then a checkout step will be skipped in the Build-A-Badge action, which will reduce the amount of time it takes to run.
 
 ## Examples
 
