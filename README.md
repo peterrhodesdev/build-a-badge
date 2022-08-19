@@ -60,7 +60,7 @@ jobs:
     name: Multiple badges
     runs-on: ubuntu-latest
     steps:
-      - name: Build-A-Badge multiple
+      - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -157,7 +157,11 @@ The steps to include a custom logo in the badge like the one above are are:
 
 ![npm-package-version](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-version.md) ![npm-package-license](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-license.md) ![npm-package-size-unpacked](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-unpacked.md) ![npm-package-size-minified](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified.md) ![npm-package-size-minified-gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified-gzip.md) ![npm-package-dependency-count](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-dependency-count.md) ![npm-package-downloads](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-downloads.md)
 
-Badges for an npm package ([react](https://www.npmjs.com/package/react) in this example) using the results from the `npm view` command as well as the [npm registry](https://github.com/npm/registry/blob/master/docs/download-counts.md) and [Bundlephobia](https://bundlephobia.com/) APIs.
+Badges for an npm package ([react](https://www.npmjs.com/package/react) in this example) using the results from:
+
+- `npm view` - version, license, unpacked size
+- [Bundlephobia](https://bundlephobia.com/) - minified size, minified + gzipped size, dependencies
+- [npm registry](https://github.com/npm/registry/blob/master/docs/download-counts.md) - downloads last week (should be moved to a [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule) event)
 
 ```yml
 name: Create npm package badges
@@ -186,7 +190,7 @@ jobs:
           echo "::set-output name=dependency_count::$(jq '.dependencyCount' <<< '${{ steps.bundlephobia.outputs.json }}')"
           echo "::set-output name=downloads::$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))"
         shell: bash
-      - name: Build-A-Badge npm package
+      - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -221,7 +225,7 @@ jobs:
               "${{ steps.npm_package_details.outputs.downloads }}"
             )
           namedLogo: ("npm" "npm" "npm" "npm" "npm" "npm" "npm")
-          color: ("blue" "yellow" "purple" "orange" "green" "red" "")
+          color: ("cc3534" "cc3534" "cc3534" "cc3534" "cc3534" "cc3534" "cc3534")
 ```
 
 ```markdown

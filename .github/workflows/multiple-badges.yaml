@@ -5,7 +5,7 @@ jobs:
     name: Multiple badges
     runs-on: ubuntu-latest
     steps:
-      - name: Build-A-Badge multiple
+      - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

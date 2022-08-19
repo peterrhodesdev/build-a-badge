@@ -24,7 +24,7 @@ jobs:
           echo "::set-output name=dependency_count::$(jq '.dependencyCount' <<< '${{ steps.bundlephobia.outputs.json }}')"
           echo "::set-output name=downloads::$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))"
         shell: bash
-      - name: Build-A-Badge npm package
+      - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.2.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -59,4 +59,4 @@ jobs:
               "${{ steps.npm_package_details.outputs.downloads }}"
             )
           namedLogo: ("npm" "npm" "npm" "npm" "npm" "npm" "npm")
-          color: ("blue" "yellow" "purple" "orange" "green" "red" "")
+          color: ("cc3534" "cc3534" "cc3534" "cc3534" "cc3534" "cc3534" "cc3534")
