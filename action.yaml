@@ -32,6 +32,18 @@ inputs:
     description: "The default template to use"
     required: false
     default: ""
+  wikiCommitUsername:
+    description: "Override for the wiki commit username"
+    required: false
+    default: ""
+  wikiCommitEmail:
+    description: "Override for the wiki commit email"
+    required: false
+    default: ""
+  wikiCommitMessage:
+    description: "Override for the wiki commit message"
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -45,12 +57,29 @@ runs:
       uses: actions/checkout@v3
       with:
         token: ${{ inputs.token }}
-    - name: Output last commit details
-      id: last_commit
+    - name: Output wiki commit details
+      id: wiki_commit
       run: |
-        echo "::set-output name=username::$(git log -n 1 --pretty=format:%an)"
-        echo "::set-output name=email::$(git log -n 1 --pretty=format:%ae)"
-        echo "::set-output name=hash::$(git log -n 1 --pretty=format:"%H")"
+        if [[ -n "${{ inputs.wikiCommitUsername }}" ]]; then
+          WIKI_COMMIT_USERNAME="${{ inputs.wikiCommitUsername }}"
+        else
+          WIKI_COMMIT_USERNAME=$(git log -n 1 --pretty=format:%an)
+        fi
+        echo "::set-output name=username::$WIKI_COMMIT_USERNAME"
+
+        if [[ -n "${{ inputs.wikiCommitEmail }}" ]]; then
+          WIKI_COMMIT_EMAIL="${{ inputs.wikiCommitEmail }}"
+        else
+          WIKI_COMMIT_EMAIL=$(git log -n 1 --pretty=format:%ae)
+        fi
+        echo "::set-output name=email::$WIKI_COMMIT_EMAIL"
+
+        if [[ -n "${{ inputs.wikiCommitMessage }}" ]]; then
+          WIKI_COMMIT_MESSAGE="${{ inputs.wikiCommitMessage }}"
+        else
+          WIKI_COMMIT_MESSAGE=https://github.com/${{ github.repository }}/commit/$(git log -n 1 --pretty=format:"%H")
+        fi
+        echo "::set-output name=message::$WIKI_COMMIT_MESSAGE"
       shell: bash
     - name: Check out wiki
       uses: actions/checkout@v3
@@ -114,10 +143,10 @@ runs:
 
         git pull
         if [[ -n $(git status --porcelain) ]]; then
-          git config user.name ${{ steps.last_commit.outputs.username }}
-          git config user.email ${{ steps.last_commit.outputs.email }}
+          git config user.name "${{ steps.wiki_commit.outputs.username }}"
+          git config user.email "${{ steps.wiki_commit.outputs.email }}"
           git add -A
-          git commit -m "https://github.com/$GITHUB_REPOSITORY/commit/${{ steps.last_commit.outputs.hash }}"
+          git commit -m "${{ steps.wiki_commit.outputs.message }}"
           git push
         fi
 

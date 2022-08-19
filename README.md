@@ -91,18 +91,21 @@ Add the badges to the README according to the `filename` specified for each:
 
 See [Shields.io](https://shields.io/) and the [endpoint](https://shields.io/endpoint) for a more detailed description and list of supported values for the parameters.
 
-| Name | Is required? | Default value | Description |
-| --- | --- | --- | --- |
-| token | yes | | GitHub token secret used for authentication. The value [automatically created by GitHub](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) can be used: `${{ secrets.GITHUB_TOKEN }}`. |
-| filename | yes | | The filename to use in the wiki for storing the JSON badge data. It cannot contain any whitespace characters. |
-| label | yes | | The left text. |
-| message | yes | | The right text. |
-| color | no | lightgrey | The right color. |
-| labelColor | no | grey | The left color. |
-| namedLogo | no | | Logo supported by Shields. |
-| style | no | flat | The default template to use. |
+| Name | Is required? | Default value | Array supported? | Description |
+| --- | --- | --- | --- | --- |
+| token | yes | | no | GitHub token secret used for authentication. The value [automatically created by GitHub](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) can be used: `${{ secrets.GITHUB_TOKEN }}`. |
+| filename | yes | | yes | The filename to use in the wiki for storing the JSON badge data. It cannot contain any whitespace characters. |
+| label | yes | | yes | The left text. |
+| message | yes | | yes | The right text. |
+| color | no | lightgrey | yes | The right color. |
+| labelColor | no | grey | yes | The left color. |
+| namedLogo | no | | yes | Logo supported by Shields. |
+| style | no | flat | yes | The default template to use. |
+| wikiCommitUsername | no | username from the last commit | no | Override for the wiki commit username. |
+| wikiCommitEmail | no | email from the last commit | no | Override for the wiki commit email. |
+| wikiCommitMessage | no | URL link to the last commit | no | Override for the wiki commit message. |
 
-> Each parameter supports either a single value or an array. Only one or the other is supported, i.e. either all parameters need to be single or all parameters need to be an array.
+> Parameters marked as "Array supported" can be specified using either a single value or an array. Note that only one or the other is allowed, i.e. either all applicable parameters need to be single values or they all need to be arrays.
 
 ## Examples
 
