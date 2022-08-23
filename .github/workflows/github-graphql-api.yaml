@@ -1,0 +1,50 @@
+name: Create GitHub GraphQL API badges
+on: [push]
+jobs:
+  github-graphql-api-badges:
+    name: GitHub GraphQL API badges
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output GitHub GraphQL API info
+        id: github_info
+        run: |
+          function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
+          function github_graphql_request {
+            echo $( \
+              curl -H 'Content-Type: application/json' \
+              -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -X POST \
+              -d '{"query": "query {repository(owner: \"${{ github.repository_owner }}\", name: \"${{ github.event.repository.name }}\") {'$1$2' {totalCount}}}"}' \
+              https://api.github.com/graphql \
+              | jq ".data.repository."$1".totalCount" \
+            );
+          }
+          echo "::set-output name=open_issues::$(format_number $(github_graphql_request 'issues' '(states:OPEN)'))"
+          echo "::set-output name=open_vulnerabilities::$(format_number $(github_graphql_request 'vulnerabilityAlerts' '(states:OPEN)'))"
+          echo "::set-output name=open_pull_requests::$(format_number $(github_graphql_request 'pullRequests' '(states:OPEN)'))"
+          echo "::set-output name=stars::$(format_number $(github_graphql_request 'stargazers' ''))"
+          echo "::set-output name=forks::$(format_number $(github_graphql_request 'forks' ''))"
+        shell: bash
+      - name: Build-A-Badge
+        uses: peterrhodesdev/build-a-badge@v1.2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          filename: |
+            (
+              "github-graphql-api-open-issues"
+              "github-graphql-api-open-vulnerabilities"
+              "github-graphql-api-open-pull-requests"
+              "github-graphql-api-forks"
+              "github-graphql-api-stars"
+            )
+          label: ("open issues" "open vulnerabilities" "open pull requests" "forks" "stars")
+          message: |
+            (
+              "${{ steps.github_info.outputs.open_issues }}"
+              "${{ steps.github_info.outputs.open_vulnerabilities }}"
+              "${{ steps.github_info.outputs.open_pull_requests }}"
+              "${{ steps.github_info.outputs.forks }}"
+              "${{ steps.github_info.outputs.stars }}"
+            )
+          namedLogo: ("github" "github" "github" "github" "github")
+          color: ("4078c0" "4078c0" "4078c0" "4078c0" "4078c0")

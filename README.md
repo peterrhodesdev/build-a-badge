@@ -112,6 +112,7 @@ If `wikiCommitUsername`, `wikiCommitEmail`, and `wikiCommitMessage` are all over
 ## Examples
 
 - [Custom logo](#custom-logo)
+- [GitHub GraphQL API](#github-graphql-api)
 - [git](#git)
 - [npm package](#npm-package)
 
@@ -151,11 +152,78 @@ Some steps that might be helpful for including a custom logo in the badge:
 1. Encode the data URI by replacing the plus sign (`+`) with `%2b`.
 1. Add the encoded data URI to the query string in the README like: `https://img.shields.io/endpoint?url=...&logo=<encoded data URI>`.
 
+### GitHub GraphQL API
+
+![github-graphql-api-open-issues](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/github-graphql-api-open-issues.md) ![github-graphql-api-open-vulnerabilities](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/github-graphql-api-open-vulnerabilities.md) ![github-graphql-api-open-pull-requests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/github-graphql-api-open-pull-requests.md) ![github-graphql-api-forks](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/github-graphql-api-forks.md) ![github-graphql-api-stars](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/github-graphql-api-stars.md)
+
+Badges generated from the results of some requests to the [GitHub GraphQL API](https://docs.github.com/en/graphql): open issues, open vulnerabilities, open pull requests, forks, and stars.
+
+```yml
+name: Create GitHub GraphQL API badges
+on: [push]
+jobs:
+  github-graphql-api-badges:
+    name: GitHub GraphQL API badges
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output GitHub GraphQL API info
+        id: github_info
+        run: |
+          function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
+          function github_graphql_request {
+            echo $( \
+              curl -H 'Content-Type: application/json' \
+              -H "Authorization: bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -X POST \
+              -d '{"query": "query {repository(owner: \"${{ github.repository_owner }}\", name: \"${{ github.event.repository.name }}\") {'$1$2' {totalCount}}}"}' \
+              https://api.github.com/graphql \
+              | jq ".data.repository."$1".totalCount" \
+            );
+          }
+          echo "::set-output name=open_issues::$(format_number $(github_graphql_request 'issues' '(states:OPEN)'))"
+          echo "::set-output name=open_vulnerabilities::$(format_number $(github_graphql_request 'vulnerabilityAlerts' '(states:OPEN)'))"
+          echo "::set-output name=open_pull_requests::$(format_number $(github_graphql_request 'pullRequests' '(states:OPEN)'))"
+          echo "::set-output name=stars::$(format_number $(github_graphql_request 'stargazers' ''))"
+          echo "::set-output name=forks::$(format_number $(github_graphql_request 'forks' ''))"
+        shell: bash
+      - name: Build-A-Badge
+        uses: peterrhodesdev/build-a-badge@v1.2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          filename: |
+            (
+              "github-graphql-api-open-issues"
+              "github-graphql-api-open-vulnerabilities"
+              "github-graphql-api-open-pull-requests"
+              "github-graphql-api-forks"
+              "github-graphql-api-stars"
+            )
+          label: ("open issues" "open vulnerabilities" "open pull requests" "forks" "stars")
+          message: |
+            (
+              "${{ steps.github_info.outputs.open_issues }}"
+              "${{ steps.github_info.outputs.open_vulnerabilities }}"
+              "${{ steps.github_info.outputs.open_pull_requests }}"
+              "${{ steps.github_info.outputs.forks }}"
+              "${{ steps.github_info.outputs.stars }}"
+            )
+          namedLogo: ("github" "github" "github" "github" "github")
+          color: ("4078c0" "4078c0" "4078c0" "4078c0" "4078c0")
+```
+
+```markdown
+![github-graphql-api-open-issues](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/github-graphql-api-open-issues.md)
+![github-graphql-api-open-vulnerabilities](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/github-graphql-api-open-vulnerabilities.md)
+![github-graphql-api-open-pull-requests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/github-graphql-api-open-pull-requests.md)
+![github-graphql-api-forks](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/github-graphql-api-forks.md)
+![github-graphql-api-stars](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/github-graphql-api-stars.md)
+```
+
 ### git
 
 ![git-size](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-size.md) ![git-file-count](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-file-count.md) ![git-last-commit-date](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-last-commit-date.md) ![git-latest-release](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-latest-release.md) ![git-commits-to-main](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-commits-to-main.md)
 
-Badges generated from the results of some `git` commands.
+Badges generated from the results of some `git` commands: size, file count, last commit date, latest release, and commits to main.
 
 ```yml
 name: Create git badges
