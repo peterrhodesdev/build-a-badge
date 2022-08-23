@@ -112,6 +112,7 @@ If `wikiCommitUsername`, `wikiCommitEmail`, and `wikiCommitMessage` are all over
 ## Examples
 
 - [Custom logo](#custom-logo)
+- [git](#git)
 - [npm package](#npm-package)
 
 ### Custom logo
@@ -149,6 +150,68 @@ Some steps that might be helpful for including a custom logo in the badge:
 1. Convert the SVG to a Base64 data URI (I used [Base64 Guru](https://base64.guru/converter/encode/image/svg)).
 1. Encode the data URI by replacing the plus sign (`+`) with `%2b`.
 1. Add the encoded data URI to the query string in the README like: `https://img.shields.io/endpoint?url=...&logo=<encoded data URI>`.
+
+### git
+
+![git-size](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-size.md) ![git-file-count](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-file-count.md) ![git-last-commit-date](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-last-commit-date.md) ![git-latest-release](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-latest-release.md) ![git-commits-to-main](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-commits-to-main.md)
+
+Badges generated from the results of some `git` commands.
+
+```yml
+name: Create git badges
+on: [push]
+jobs:
+  git-badges:
+    name: git badges
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo with all history
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Output git info
+        id: git_info
+        run: |
+          function format_size { echo $(numfmt --to iec --suffix B $1); }
+          function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
+          echo "::set-output name=size::$(format_size $(git count-objects -v | grep 'size-pack: ' | sed 's/size-pack: //g' | tr -d '\n'))"
+          echo "::set-output name=file_count::$(format_number $(git ls-files | wc -l))"
+          echo "::set-output name=last_commit_date::$(git log -1 --format=%cd)"
+          echo "::set-output name=latest_release::$(git describe --tags --abbrev=0)"
+          echo "::set-output name=commits_to_main::$(format_number $(git rev-list --count main))"
+        shell: bash
+      - name: Build-A-Badge
+        uses: peterrhodesdev/build-a-badge@v1.2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          filename: |
+            (
+              "git-size"
+              "git-file-count"
+              "git-last-commit-date"
+              "git-latest-release"
+              "git-commits-to-main"
+            )
+          label: ("size" "files" "last commit" "latest release" "commits to main")
+          message: |
+            (
+              "${{ steps.git_info.outputs.size }}"
+              "${{ steps.git_info.outputs.file_count }}"
+              "${{ steps.git_info.outputs.last_commit_date }}"
+              "${{ steps.git_info.outputs.latest_release }}"
+              "${{ steps.git_info.outputs.commits_to_main }}"
+            )
+          namedLogo: ("git" "git" "git" "git" "git")
+          color: ("f1502f" "f1502f" "f1502f" "f1502f" "f1502f")
+```
+
+```markdown
+![git-size](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-size.md)
+![git-file-count](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-file-count.md)
+![git-last-commit-date](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-last-commit-date.md)
+![git-latest-release](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-latest-release.md)
+![git-commits-to-main](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/git-commits-to-main.md)
+```
 
 ### npm package
 

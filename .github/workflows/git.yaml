@@ -1,0 +1,45 @@
+name: Create git badges
+on: [push]
+jobs:
+  git-badges:
+    name: git badges
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo with all history
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Output git info
+        id: git_info
+        run: |
+          function format_size { echo $(numfmt --to iec --suffix B $1); }
+          function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
+          echo "::set-output name=size::$(format_size $(git count-objects -v | grep 'size-pack: ' | sed 's/size-pack: //g' | tr -d '\n'))"
+          echo "::set-output name=file_count::$(format_number $(git ls-files | wc -l))"
+          echo "::set-output name=last_commit_date::$(git log -1 --format=%cd)"
+          echo "::set-output name=latest_release::$(git describe --tags --abbrev=0)"
+          echo "::set-output name=commits_to_main::$(format_number $(git rev-list --count main))"
+        shell: bash
+      - name: Build-A-Badge
+        uses: peterrhodesdev/build-a-badge@v1.2.3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          filename: |
+            (
+              "git-size"
+              "git-file-count"
+              "git-last-commit-date"
+              "git-latest-release"
+              "git-commits-to-main"
+            )
+          label: ("size" "files" "last commit" "latest release" "commits to main")
+          message: |
+            (
+              "${{ steps.git_info.outputs.size }}"
+              "${{ steps.git_info.outputs.file_count }}"
+              "${{ steps.git_info.outputs.last_commit_date }}"
+              "${{ steps.git_info.outputs.latest_release }}"
+              "${{ steps.git_info.outputs.commits_to_main }}"
+            )
+          namedLogo: ("git" "git" "git" "git" "git")
+          color: ("f1502f" "f1502f" "f1502f" "f1502f" "f1502f")
