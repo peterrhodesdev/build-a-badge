@@ -14,11 +14,12 @@ jobs:
         run: |
           function format_size { echo $(numfmt --to iec --suffix B $1); }
           function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
-          echo "::set-output name=size::$(format_size $(git count-objects -v | grep 'size-pack: ' | sed 's/size-pack: //g' | tr -d '\n'))"
           echo "::set-output name=file_count::$(format_number $(git ls-files | wc -l))"
           echo "::set-output name=last_commit_date::$(git log -1 --format=%cd)"
           echo "::set-output name=latest_release::$(git describe --tags --abbrev=0)"
           echo "::set-output name=commits_to_main::$(format_number $(git rev-list --count main))"
+          git gc
+          echo "::set-output name=size::$(format_size $(($(git count-objects -v | grep 'size-pack: ' | sed 's/size-pack: //g' | tr -d '\n') * 1024)))"
         shell: bash
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.2.3
