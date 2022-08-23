@@ -160,7 +160,9 @@ Badges generated from the results of some requests to the [GitHub GraphQL API](h
 
 ```yml
 name: Create GitHub GraphQL API badges
-on: [push]
+on:
+  schedule:
+    - cron: "0 0 * * *"
 jobs:
   github-graphql-api-badges:
     name: GitHub GraphQL API badges
@@ -169,7 +171,6 @@ jobs:
       - name: Output GitHub GraphQL API info
         id: github_info
         run: |
-          function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
           function github_graphql_request {
             echo $( \
               curl -H 'Content-Type: application/json' \
@@ -180,11 +181,11 @@ jobs:
               | jq ".data.repository."$1".totalCount" \
             );
           }
-          echo "::set-output name=open_issues::$(format_number $(github_graphql_request 'issues' '(states:OPEN)'))"
-          echo "::set-output name=open_vulnerabilities::$(format_number $(github_graphql_request 'vulnerabilityAlerts' '(states:OPEN)'))"
-          echo "::set-output name=open_pull_requests::$(format_number $(github_graphql_request 'pullRequests' '(states:OPEN)'))"
-          echo "::set-output name=stars::$(format_number $(github_graphql_request 'stargazers' ''))"
-          echo "::set-output name=forks::$(format_number $(github_graphql_request 'forks' ''))"
+          echo "::set-output name=open_issues::$(github_graphql_request 'issues' '(states:OPEN)')"
+          echo "::set-output name=open_vulnerabilities::$(github_graphql_request 'vulnerabilityAlerts' '(states:OPEN)')"
+          echo "::set-output name=open_pull_requests::$(github_graphql_request 'pullRequests' '(states:OPEN)')"
+          echo "::set-output name=stars::$(github_graphql_request 'stargazers' '')"
+          echo "::set-output name=forks::$(github_graphql_request 'forks' '')"
         shell: bash
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.2.3
@@ -290,11 +291,13 @@ Badges for an npm package ([react](https://www.npmjs.com/package/react) in this 
 
 - `npm view` - version, license, unpacked size
 - [Bundlephobia](https://bundlephobia.com/) - minified size, minified + gzipped size, dependencies
-- [npm registry](https://github.com/npm/registry/blob/master/docs/download-counts.md) - downloads last week (should be moved to a [schedule](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule) event)
+- [npm registry](https://github.com/npm/registry/blob/master/docs/download-counts.md) - downloads last week
 
 ```yml
 name: Create npm package badges
-on: [push]
+on:
+  schedule:
+    - cron: "0 0 * * 0"
 jobs:
   npm-package-badges:
     name: npm package badges

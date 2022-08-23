@@ -1,5 +1,7 @@
 name: Create npm package badges
-on: [push]
+on:
+  schedule:
+    - cron: "0 0 * * 0"
 jobs:
   npm-package-badges:
     name: npm package badges
