@@ -125,6 +125,7 @@ If `wikiCommitUsername`, `wikiCommitEmail`, and `wikiCommitMessage` are all over
 - [GitHub GraphQL API](#github-graphql-api)
 - [git](#git)
 - [npm package](#npm-package)
+- [Crypto](#crypto)
 
 ### GitHub GraphQL API
 
@@ -342,4 +343,56 @@ jobs:
 ![npm-package-size-minified-gzip](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-size-minified-gzip.md)
 ![npm-package-dependency-count](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-dependency-count.md)
 ![npm-package-downloads](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/npm-package-downloads.md)
+```
+
+### Crypto
+
+![crypto-bitcoin-price](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/crypto-bitcoin-price.md) ![crypto-bitcoin-market-cap](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/crypto-bitcoin-market-cap.md) ![crypto-bitcoin-change](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/crypto-bitcoin-change.md)
+
+Cryptocurrency badges using the market data provided by [CoinGecko API](https://www.coingecko.com/en/api).
+
+```yml
+name: Create crypto badges
+on: [push]
+jobs:
+  crypto-badges:
+    name: Crypto badges
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request market data from CoinGecko
+        id: coingecko
+        run: |
+          COINGECKO_JSON=$(curl -X 'GET' 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&order=id_desc&per_page=1&page=1&sparkline=false&price_change_percentage=24h' -H 'accept: application/json')
+          echo "::set-output name=json::$COINGECKO_JSON"
+        shell: bash
+      - name: Output market data
+        id: market_data
+        run: |
+          function format_dollar_amount { LC_ALL=en_US.UTF-8 printf "%'0.2f\n" $1; }
+          function get_change_color { if (( $(echo "$1 >= 0" | bc -l) )); then printf 'green'; else printf 'red'; fi; }
+          echo "::set-output name=current_price::$(format_dollar_amount $(jq '.[0].current_price' <<< '${{ steps.coingecko.outputs.json }}'))"
+          echo "::set-output name=market_cap::$(format_dollar_amount $(jq '.[0].market_cap' <<< '${{ steps.coingecko.outputs.json }}'))"
+          echo "::set-output name=percentage_change::$(printf '%0.2f' $(jq '.[0].price_change_percentage_24h' <<< '${{ steps.coingecko.outputs.json }}'))"
+          echo "::set-output name=percentage_change_color::$(get_change_color $(jq '.[0].price_change_percentage_24h' <<< '${{ steps.coingecko.outputs.json }}'))"
+        shell: bash
+      - name: Build-A-Badge
+        uses: peterrhodesdev/build-a-badge@v1.3.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          filename: ("crypto-bitcoin-price" "crypto-bitcoin-market-cap" "crypto-bitcoin-change")
+          label: ("current price" "market cap" "24hr change")
+          message: |
+            (
+              "\$${{ steps.market_data.outputs.current_price }}"
+              "\$${{ steps.market_data.outputs.market_cap }}"
+              "${{ steps.market_data.outputs.percentage_change }}%"
+            )
+          color: ("f2a900" "f2a900" "${{ steps.market_data.outputs.percentage_change_color }}")
+          namedLogo: ("bitcoin" "bitcoin" "bitcoin")
+```
+
+```markdown
+![crypto-bitcoin-price](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/crypto-bitcoin-price.md)
+![crypto-bitcoin-market-cap](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/crypto-bitcoin-market-cap.md)
+![crypto-bitcoin-change](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/wiki/peterrhodesdev/build-a-badge/crypto-bitcoin-change.md)
 ```
