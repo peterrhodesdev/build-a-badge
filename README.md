@@ -24,7 +24,7 @@ Add a step to your workflow:
 
 ```yml
 - name: Build-A-Badge
-  uses: peterrhodesdev/build-a-badge@v1.2.3
+  uses: peterrhodesdev/build-a-badge@v1.3.0
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
     filename: my-badge
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.2.3
+        uses: peterrhodesdev/build-a-badge@v1.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: ("multiple-badges-1" "multiple-badges-2" "multiple-badges-3" "multiple-badges-4" "multiple-badges-5")
@@ -162,7 +162,7 @@ jobs:
           echo "::set-output name=forks::$(github_graphql_request 'forks' '')"
         shell: bash
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.2.3
+        uses: peterrhodesdev/build-a-badge@v1.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
@@ -225,7 +225,7 @@ jobs:
           echo "::set-output name=size::$(format_size $(($(git count-objects -v | grep 'size-pack: ' | sed 's/size-pack: //g' | tr -d '\n') * 1024)))"
         shell: bash
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.2.3
+        uses: peterrhodesdev/build-a-badge@v1.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
@@ -297,7 +297,7 @@ jobs:
           echo "::set-output name=downloads::$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))"
         shell: bash
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.2.3
+        uses: peterrhodesdev/build-a-badge@v1.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |

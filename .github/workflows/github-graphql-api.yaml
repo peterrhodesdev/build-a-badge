@@ -27,7 +27,7 @@ jobs:
           echo "::set-output name=forks::$(github_graphql_request 'forks' '')"
         shell: bash
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.2.3
+        uses: peterrhodesdev/build-a-badge@v1.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |

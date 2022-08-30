@@ -27,7 +27,7 @@ jobs:
           echo "::set-output name=downloads::$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))"
         shell: bash
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.2.3
+        uses: peterrhodesdev/build-a-badge@v1.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
