@@ -28,6 +28,10 @@ inputs:
     description: "Logo supported by Shields"
     required: false
     default: ""
+  logoSvg:
+    description: "An SVG string containing a custom logo"
+    required: false
+    default: ""
   style:
     description: "The default template to use"
     required: false
@@ -99,6 +103,7 @@ runs:
           BAB_INPUTS_COLOR="${{ inputs.color }}"
           BAB_INPUTS_LABELCOLOR="${{ inputs.labelColor }}"
           BAB_INPUTS_NAMEDLOGO="${{ inputs.namedLogo }}"
+          BAB_INPUTS_LOGOSVG="${{ inputs.logoSvg }}"
           BAB_INPUTS_STYLE="${{ inputs.style }}"
         else
           declare -a BAB_INPUTS_FILENAME_ARRAY=${{ inputs.filename }}
@@ -107,6 +112,7 @@ runs:
           declare -a BAB_INPUTS_COLOR_ARRAY=${{ inputs.color }}
           declare -a BAB_INPUTS_LABELCOLOR_ARRAY=${{ inputs.labelColor }}
           declare -a BAB_INPUTS_NAMEDLOGO_ARRAY=${{ inputs.namedLogo }}
+          declare -a BAB_INPUTS_LOGOSVG_ARRAY=${{ inputs.logoSvg }}
           declare -a BAB_INPUTS_STYLE_ARRAY=${{ inputs.style }}
         fi
 
@@ -120,6 +126,7 @@ runs:
             BAB_INPUTS_COLOR=${BAB_INPUTS_COLOR_ARRAY[i-1]}
             BAB_INPUTS_LABELCOLOR=${BAB_INPUTS_LABELCOLOR_ARRAY[i-1]}
             BAB_INPUTS_NAMEDLOGO=${BAB_INPUTS_NAMEDLOGO_ARRAY[i-1]}
+            BAB_INPUTS_LOGOSVG=${BAB_INPUTS_LOGOSVG_ARRAY[i-1]}
             BAB_INPUTS_STYLE=${BAB_INPUTS_STYLE_ARRAY[i-1]}
           fi
 
@@ -130,6 +137,7 @@ runs:
           OPTIONAL_PARAMETERS_ARRAY["color"]=$BAB_INPUTS_COLOR
           OPTIONAL_PARAMETERS_ARRAY["labelColor"]=$BAB_INPUTS_LABELCOLOR
           OPTIONAL_PARAMETERS_ARRAY["namedLogo"]=$BAB_INPUTS_NAMEDLOGO
+          OPTIONAL_PARAMETERS_ARRAY["logoSvg"]=$(echo $BAB_INPUTS_LOGOSVG | sed -e 's/"/\\"/g')
           OPTIONAL_PARAMETERS_ARRAY["style"]=$BAB_INPUTS_STYLE
 
           for key in ${!OPTIONAL_PARAMETERS_ARRAY[@]}; do
