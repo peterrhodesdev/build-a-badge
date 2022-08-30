@@ -353,7 +353,9 @@ Cryptocurrency badges using the market data provided by [CoinGecko API](https://
 
 ```yml
 name: Create crypto badges
-on: [push]
+on:
+  schedule:
+    - cron: "0 0 * * *"
 jobs:
   crypto-badges:
     name: Crypto badges
