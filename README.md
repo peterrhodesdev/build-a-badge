@@ -156,11 +156,11 @@ jobs:
               | jq ".data.repository."$1".totalCount" \
             );
           }
-          echo "::set-output name=open_issues::$(github_graphql_request 'issues' '(states:OPEN)')"
-          echo "::set-output name=open_vulnerabilities::$(github_graphql_request 'vulnerabilityAlerts' '(states:OPEN)')"
-          echo "::set-output name=open_pull_requests::$(github_graphql_request 'pullRequests' '(states:OPEN)')"
-          echo "::set-output name=stars::$(github_graphql_request 'stargazers' '')"
-          echo "::set-output name=forks::$(github_graphql_request 'forks' '')"
+          echo "open_issues=$(github_graphql_request 'issues' '(states:OPEN)')" >> $GITHUB_OUTPUT
+          echo "open_vulnerabilities=$(github_graphql_request 'vulnerabilityAlerts' '(states:OPEN)')" >> $GITHUB_OUTPUT
+          echo "open_pull_requests=$(github_graphql_request 'pullRequests' '(states:OPEN)')" >> $GITHUB_OUTPUT
+          echo "stars=$(github_graphql_request 'stargazers' '')" >> $GITHUB_OUTPUT
+          echo "forks=$(github_graphql_request 'forks' '')" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.3.0
@@ -218,12 +218,12 @@ jobs:
         run: |
           function format_size { echo $(numfmt --to iec --suffix B $1); }
           function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
-          echo "::set-output name=file_count::$(format_number $(git ls-files | wc -l))"
-          echo "::set-output name=last_commit_date::$(git log -1 --format=%cd)"
-          echo "::set-output name=latest_release::$(git describe --tags --abbrev=0)"
-          echo "::set-output name=commits_to_main::$(format_number $(git rev-list --count main))"
+          echo "file_count=$(format_number $(git ls-files | wc -l))" >> $GITHUB_OUTPUT
+          echo "last_commit_date=$(git log -1 --format=%cd)" >> $GITHUB_OUTPUT
+          echo "latest_release=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+          echo "commits_to_main=$(format_number $(git rev-list --count main))" >> $GITHUB_OUTPUT
           git gc
-          echo "::set-output name=size::$(format_size $(($(git count-objects -v | grep 'size-pack: ' | sed 's/size-pack: //g' | tr -d '\n') * 1024)))"
+          echo "size=$(format_size $(($(git count-objects -v | grep 'size-pack: ' | sed 's/size-pack: //g' | tr -d '\n') * 1024)))" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.3.0
@@ -282,20 +282,20 @@ jobs:
     steps:
       - name: Request JSON data from Bundlephobia
         id: bundlephobia
-        run: echo "::set-output name=json::$(curl https://bundlephobia.com/api/size?package=$NPM_PACKAGE_NAME)"
+        run: echo "json=$(curl https://bundlephobia.com/api/size?package=$NPM_PACKAGE_NAME)" >> $GITHUB_OUTPUT
         shell: bash
       - name: Output NPM package details
         id: npm_package_details
         run: |
           function format_size { echo $(numfmt --to iec --suffix B $1); }
           function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
-          echo "::set-output name=version::$(npm view $NPM_PACKAGE_NAME dist-tags.latest)"
-          echo "::set-output name=license::$(npm view $NPM_PACKAGE_NAME license)"
-          echo "::set-output name=size_unpacked::$(format_size $(npm view $NPM_PACKAGE_NAME dist.unpackedSize))"
-          echo "::set-output name=size_minified::$(format_size $(jq '.size' <<< '${{ steps.bundlephobia.outputs.json }}'))"
-          echo "::set-output name=size_minified_gzip::$(format_size $(jq '.gzip' <<< '${{ steps.bundlephobia.outputs.json }}'))"
-          echo "::set-output name=dependency_count::$(jq '.dependencyCount' <<< '${{ steps.bundlephobia.outputs.json }}')"
-          echo "::set-output name=downloads::$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))"
+          echo "version=$(npm view $NPM_PACKAGE_NAME dist-tags.latest)" >> $GITHUB_OUTPUT
+          echo "license=$(npm view $NPM_PACKAGE_NAME license)" >> $GITHUB_OUTPUT
+          echo "size_unpacked=$(format_size $(npm view $NPM_PACKAGE_NAME dist.unpackedSize))" >> $GITHUB_OUTPUT
+          echo "size_minified=$(format_size $(jq '.size' <<< '${{ steps.bundlephobia.outputs.json }}'))" >> $GITHUB_OUTPUT
+          echo "size_minified_gzip=$(format_size $(jq '.gzip' <<< '${{ steps.bundlephobia.outputs.json }}'))" >> $GITHUB_OUTPUT
+          echo "dependency_count=$(jq '.dependencyCount' <<< '${{ steps.bundlephobia.outputs.json }}')" >> $GITHUB_OUTPUT
+          echo "downloads=$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.3.0
@@ -365,17 +365,17 @@ jobs:
         id: coingecko
         run: |
           COINGECKO_JSON=$(curl -X 'GET' 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&order=id_desc&per_page=1&page=1&sparkline=false&price_change_percentage=24h' -H 'accept: application/json')
-          echo "::set-output name=json::$COINGECKO_JSON"
+          echo "json=$COINGECKO_JSON" >> $GITHUB_OUTPUT
         shell: bash
       - name: Output market data
         id: market_data
         run: |
           function format_dollar_amount { LC_ALL=en_US.UTF-8 printf "%'0.2f\n" $1; }
           function get_change_color { if (( $(echo "$1 >= 0" | bc -l) )); then printf 'green'; else printf 'red'; fi; }
-          echo "::set-output name=current_price::$(format_dollar_amount $(jq '.[0].current_price' <<< '${{ steps.coingecko.outputs.json }}'))"
-          echo "::set-output name=market_cap::$(format_dollar_amount $(jq '.[0].market_cap' <<< '${{ steps.coingecko.outputs.json }}'))"
-          echo "::set-output name=percentage_change::$(printf '%0.2f' $(jq '.[0].price_change_percentage_24h' <<< '${{ steps.coingecko.outputs.json }}'))"
-          echo "::set-output name=percentage_change_color::$(get_change_color $(jq '.[0].price_change_percentage_24h' <<< '${{ steps.coingecko.outputs.json }}'))"
+          echo "current_price=$(format_dollar_amount $(jq '.[0].current_price' <<< '${{ steps.coingecko.outputs.json }}'))" >> $GITHUB_OUTPUT
+          echo "market_cap=$(format_dollar_amount $(jq '.[0].market_cap' <<< '${{ steps.coingecko.outputs.json }}'))" >> $GITHUB_OUTPUT
+          echo "percentage_change=$(printf '%0.2f' $(jq '.[0].price_change_percentage_24h' <<< '${{ steps.coingecko.outputs.json }}'))" >> $GITHUB_OUTPUT
+          echo "percentage_change_color=$(get_change_color $(jq '.[0].price_change_percentage_24h' <<< '${{ steps.coingecko.outputs.json }}'))" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.3.0

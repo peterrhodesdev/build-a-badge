@@ -11,20 +11,20 @@ jobs:
     steps:
       - name: Request JSON data from Bundlephobia
         id: bundlephobia
-        run: echo "::set-output name=json::$(curl https://bundlephobia.com/api/size?package=$NPM_PACKAGE_NAME)"
+        run: echo "json=$(curl https://bundlephobia.com/api/size?package=$NPM_PACKAGE_NAME)" >> $GITHUB_OUTPUT
         shell: bash
       - name: Output NPM package details
         id: npm_package_details
         run: |
           function format_size { echo $(numfmt --to iec --suffix B $1); }
           function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
-          echo "::set-output name=version::$(npm view $NPM_PACKAGE_NAME dist-tags.latest)"
-          echo "::set-output name=license::$(npm view $NPM_PACKAGE_NAME license)"
-          echo "::set-output name=size_unpacked::$(format_size $(npm view $NPM_PACKAGE_NAME dist.unpackedSize))"
-          echo "::set-output name=size_minified::$(format_size $(jq '.size' <<< '${{ steps.bundlephobia.outputs.json }}'))"
-          echo "::set-output name=size_minified_gzip::$(format_size $(jq '.gzip' <<< '${{ steps.bundlephobia.outputs.json }}'))"
-          echo "::set-output name=dependency_count::$(jq '.dependencyCount' <<< '${{ steps.bundlephobia.outputs.json }}')"
-          echo "::set-output name=downloads::$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))"
+          echo "version=$(npm view $NPM_PACKAGE_NAME dist-tags.latest)" >> $GITHUB_OUTPUT
+          echo "license=$(npm view $NPM_PACKAGE_NAME license)" >> $GITHUB_OUTPUT
+          echo "size_unpacked=$(format_size $(npm view $NPM_PACKAGE_NAME dist.unpackedSize))" >> $GITHUB_OUTPUT
+          echo "size_minified=$(format_size $(jq '.size' <<< '${{ steps.bundlephobia.outputs.json }}'))" >> $GITHUB_OUTPUT
+          echo "size_minified_gzip=$(format_size $(jq '.gzip' <<< '${{ steps.bundlephobia.outputs.json }}'))" >> $GITHUB_OUTPUT
+          echo "dependency_count=$(jq '.dependencyCount' <<< '${{ steps.bundlephobia.outputs.json }}')" >> $GITHUB_OUTPUT
+          echo "downloads=$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.3.0

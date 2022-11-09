@@ -55,7 +55,7 @@ runs:
       id: number_of_badges
       run: |
         declare -a BAB_INPUTS_FILENAME_ARRAY=${{ inputs.filename }}
-        echo "::set-output name=value::$(echo ${#BAB_INPUTS_FILENAME_ARRAY[@]})"
+        echo "value=$(echo ${#BAB_INPUTS_FILENAME_ARRAY[@]})" >> $GITHUB_OUTPUT
       shell: bash
     - name: Check out repo
       uses: actions/checkout@v3
@@ -70,21 +70,21 @@ runs:
         else
           WIKI_COMMIT_USERNAME=$(git log -n 1 --pretty=format:%an)
         fi
-        echo "::set-output name=username::$WIKI_COMMIT_USERNAME"
+        echo "username=$WIKI_COMMIT_USERNAME" >> $GITHUB_OUTPUT
 
         if [[ -n "${{ inputs.wikiCommitEmail }}" ]]; then
           WIKI_COMMIT_EMAIL="${{ inputs.wikiCommitEmail }}"
         else
           WIKI_COMMIT_EMAIL=$(git log -n 1 --pretty=format:%ae)
         fi
-        echo "::set-output name=email::$WIKI_COMMIT_EMAIL"
+        echo "email=$WIKI_COMMIT_EMAIL" >> $GITHUB_OUTPUT
 
         if [[ -n "${{ inputs.wikiCommitMessage }}" ]]; then
           WIKI_COMMIT_MESSAGE="${{ inputs.wikiCommitMessage }}"
         else
           WIKI_COMMIT_MESSAGE=https://github.com/${{ github.repository }}/commit/$(git log -n 1 --pretty=format:"%H")
         fi
-        echo "::set-output name=message::$WIKI_COMMIT_MESSAGE"
+        echo "message=$WIKI_COMMIT_MESSAGE" >> $GITHUB_OUTPUT
       shell: bash
     - name: Check out wiki
       uses: actions/checkout@v3

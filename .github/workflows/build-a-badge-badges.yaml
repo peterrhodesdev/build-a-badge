@@ -11,10 +11,10 @@ jobs:
           fetch-depth: 0
       - name: Output latest release
         id: latest_release
-        run: echo "::set-output name=value::$(git describe --tags --abbrev=0)"
+        run: echo "value=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
       - name: Output license
         id: license
-        run: echo "::set-output name=value::$(head -n 1 LICENSE | sed -e 's/\( License\)*$//')"
+        run: echo "value=$(head -n 1 LICENSE | sed -e 's/\( License\)*$//')" >> $GITHUB_OUTPUT
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.3.0
         with:

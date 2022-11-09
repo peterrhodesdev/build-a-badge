@@ -20,11 +20,11 @@ jobs:
               | jq ".data.repository."$1".totalCount" \
             );
           }
-          echo "::set-output name=open_issues::$(github_graphql_request 'issues' '(states:OPEN)')"
-          echo "::set-output name=open_vulnerabilities::$(github_graphql_request 'vulnerabilityAlerts' '(states:OPEN)')"
-          echo "::set-output name=open_pull_requests::$(github_graphql_request 'pullRequests' '(states:OPEN)')"
-          echo "::set-output name=stars::$(github_graphql_request 'stargazers' '')"
-          echo "::set-output name=forks::$(github_graphql_request 'forks' '')"
+          echo "open_issues=$(github_graphql_request 'issues' '(states:OPEN)')" >> $GITHUB_OUTPUT
+          echo "open_vulnerabilities=$(github_graphql_request 'vulnerabilityAlerts' '(states:OPEN)')" >> $GITHUB_OUTPUT
+          echo "open_pull_requests=$(github_graphql_request 'pullRequests' '(states:OPEN)')" >> $GITHUB_OUTPUT
+          echo "stars=$(github_graphql_request 'stargazers' '')" >> $GITHUB_OUTPUT
+          echo "forks=$(github_graphql_request 'forks' '')" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
         uses: peterrhodesdev/build-a-badge@v1.3.0
