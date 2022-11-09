@@ -24,7 +24,7 @@ Add a step to your workflow:
 
 ```yml
 - name: Build-A-Badge
-  uses: peterrhodesdev/build-a-badge@v1.3.0
+  uses: peterrhodesdev/build-a-badge@v1.3.1
   with:
     token: ${{ secrets.GITHUB_TOKEN }}
     filename: my-badge
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.3.0
+        uses: peterrhodesdev/build-a-badge@v1.3.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: ("multiple-badges-1" "multiple-badges-2" "multiple-badges-3" "multiple-badges-4" "multiple-badges-5")
@@ -163,7 +163,7 @@ jobs:
           echo "forks=$(github_graphql_request 'forks' '')" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.3.0
+        uses: peterrhodesdev/build-a-badge@v1.3.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
@@ -226,7 +226,7 @@ jobs:
           echo "size=$(format_size $(($(git count-objects -v | grep 'size-pack: ' | sed 's/size-pack: //g' | tr -d '\n') * 1024)))" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.3.0
+        uses: peterrhodesdev/build-a-badge@v1.3.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
@@ -298,7 +298,7 @@ jobs:
           echo "downloads=$(format_number $(jq '.downloads' <<< $(curl https://api.npmjs.org/downloads/point/last-week/$NPM_PACKAGE_NAME)))" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.3.0
+        uses: peterrhodesdev/build-a-badge@v1.3.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
@@ -378,7 +378,7 @@ jobs:
           echo "percentage_change_color=$(get_change_color $(jq '.[0].price_change_percentage_24h' <<< '${{ steps.coingecko.outputs.json }}'))" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.3.0
+        uses: peterrhodesdev/build-a-badge@v1.3.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: ("crypto-bitcoin-price" "crypto-bitcoin-market-cap" "crypto-bitcoin-change")

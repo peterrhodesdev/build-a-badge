@@ -22,7 +22,7 @@ jobs:
           echo "size=$(format_size $(($(git count-objects -v | grep 'size-pack: ' | sed 's/size-pack: //g' | tr -d '\n') * 1024)))" >> $GITHUB_OUTPUT
         shell: bash
       - name: Build-A-Badge
-        uses: peterrhodesdev/build-a-badge@v1.3.0
+        uses: peterrhodesdev/build-a-badge@v1.3.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           filename: |
